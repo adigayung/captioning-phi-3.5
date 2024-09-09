@@ -75,43 +75,34 @@ To set up the repository on your machine and start generating captions with the 
 
 ## Usage
 
-Once the installation is complete, you can use the model to generate captions for images. Here's an example Python script, `caption_image.py`, that takes an image and generates a descriptive caption:
+Once the installation is complete, you can use the model to generate captions for images. Here's how you can use it:
 
-```python
-import os
-from transformers import AutoModelForImageClassification, AutoTokenizer
-from PIL import Image
-import requests
-
-# Load the Phi 3.5 Vision Instruct model and tokenizer
-model_name = "microsoft/Phi-3.5-vision-instruct"
-hf_home = os.getenv("HF_HOME", "./HuggingFace_HOME")
-model = AutoModelForImageClassification.from_pretrained(model_name, cache_dir=hf_home)
-tokenizer = AutoTokenizer.from_pretrained(model_name, cache_dir=hf_home)
-
-# Load the image (you can use a URL or a local file path)
-image_path = "path_to_your_image.jpg"  # Replace with your image file
-image = Image.open(image_path)
-
-# Preprocess the image and generate a caption
-inputs = tokenizer(images=image, return_tensors="pt")
-outputs = model(**inputs)
-
-# Get the predicted caption (logits)
-caption = outputs.logits.argmax(dim=-1)
-
-print(f"Generated Caption: {caption}")
-```
-
-### Example Command
-
-You can run the example script by typing the following in your terminal:
+### 1. **Generate Captions for All Images in a Directory**
+To generate descriptions for all images in a directory, run:
 
 ```bash
-python caption_image.py
+python run.py --image-dir /path/to/image-directory
 ```
 
-Ensure that you replace `"path_to_your_image.jpg"` with the actual path to the image you want to caption.
+Replace `/path/to/image-directory` with the path of the folder containing the images. The descriptions for each image will be saved in a `.txt` file with the same name as the image in the same folder.
+
+### 2. **Generate Captions from an Image URL**
+You can provide a URL of an image and get its description by running:
+
+```bash
+python run.py --url-image https://example.com/image.jpg
+```
+
+The script will fetch the image from the URL, generate its description, and print the result.
+
+### 3. **Generate Captions for a Specific Image File**
+To generate a description for a specific image file, run:
+
+```bash
+python run.py --image-file /path/to/image.jpg
+```
+
+The description will be saved as a `.txt` file in the same directory as the image.
 
 ## Model Details
 
